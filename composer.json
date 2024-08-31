@@ -1,6 +1,7 @@
 {
     "name": "eko-suprianto/e-bridging-bpjs",
     "description": "Library laravel untuk integrasi ke vclaim bpjs",
+    "homepage": "https://github.com/ekosuprianto96/e-bridging-bpjs",
     "type": "library",
     "license": "MIT",
     "autoload": {
