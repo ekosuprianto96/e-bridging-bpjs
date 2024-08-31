@@ -1,0 +1,26 @@
+{
+    "name": "eko-suprianto/e-bridging-bpjs",
+    "description": "Library laravel untuk integrasi ke vclaim bpjs",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "EkoSuprianto\\EBridgingBpjs\\": "src/"
+        },
+        "files": [
+            "src/Helpers/helpers.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Eko Suprianto",
+            "email": "ekhosaputra23@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "illuminate/support": "^9.0",
+        "laravel/framework": "^9.52",
+        "nullpunkt/lz-string-php": "^1.3"
+    }
+}
