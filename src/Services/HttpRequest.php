@@ -46,10 +46,12 @@ class HttpRequest {
 
         if($this->statusCode == 200) {
             $response = json_decode($response, true);
-            return $this->stringDecrypt(createKey(
-                $this->config->api_key, 
-                $this->config->secret_key, 
-                $tStamp),
+            return $this->stringDecrypt(
+                createKey(
+                    $this->config->api_key, 
+                    $this->config->secret_key, 
+                    $tStamp
+                ),
                 $response['response']
             );
         }
@@ -110,6 +112,44 @@ class HttpRequest {
             CURLOPT_CONNECTTIMEOUT => (config('vclaim.timeout_connection') * 100),
             CURLOPT_HTTP_VERSION 		=> CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST 	=> 'PUT',
+            CURLOPT_SSL_VERIFYPEER 	=> 0,
+            CURLOPT_POSTFIELDS 		=> json_encode($data),
+            CURLOPT_HTTPHEADER 		=> createHeaders(
+                $this->config->api_key,
+                $encodedSignature,
+                $this->config->user_key,
+                $tStamp
+            )
+        ]);
+
+        if($this->statusCode == 200) {
+            $response = json_decode($response, true);
+            return $this->stringDecrypt(createKey(
+                $this->config->api_key, 
+                $this->config->secret_key, 
+                $tStamp),
+                $response['response']
+            );
+        }
+
+        return $response;
+    }
+
+    public function delete(string $url, array $data = []) {
+
+        date_default_timezone_set('UTC');
+        $tStamp                 = createTimestamp();
+        $signature              = createSignature($this->config->api_key, $this->config->secret_key, $tStamp);
+        $encodedSignature       = base64_encode($signature);
+        $response = $this->send([
+            CURLOPT_URL 				=> config('vclaim.base_url') . $url,
+            CURLOPT_RETURNTRANSFER 	=> true,
+            CURLOPT_ENCODING 			=> "",
+            CURLOPT_MAXREDIRS 		=> 10,
+            CURLOPT_TIMEOUT => (config('vclaim.timeout') * 100),
+            CURLOPT_CONNECTTIMEOUT => (config('vclaim.timeout_connection') * 100),
+            CURLOPT_HTTP_VERSION 		=> CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST 	=> 'DELETE',
             CURLOPT_SSL_VERIFYPEER 	=> 0,
             CURLOPT_POSTFIELDS 		=> json_encode($data),
             CURLOPT_HTTPHEADER 		=> createHeaders(
