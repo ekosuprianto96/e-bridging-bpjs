@@ -3,21 +3,23 @@
 namespace EkoSuprianto\EBridgingBpjs;
 
 use EkoSuprianto\EBridgingBpjs\Facades\HttpFacades;
+use EkoSuprianto\EBridgingBpjs\Services\Peserta;
 
 class EBridgingBpjs {
     
-    protected $http;
-    public function __construct(HttpFacades $http) {
-        $this->http = $http;
+    protected $peserta;
+    protected $result;
+    public function __construct(Peserta $peserta) {
+        $this->peserta = $peserta;
     }
 
-    public function getPeserta(string $data) { 
-        $response = $this->http::get((
-            strlen($data) <= 13 ? 
-            'Peserta/nokartu/'.$data.'/tglSEP/'.date('Y-m-d') : 
-            'Peserta/nik/'.$data.'/tglSEP/'.date('Y-m-d')
-        ));
-        
-        return $response;
+    public function __get($name)
+    {
+        return (object) $this->result->$name;
     }
+
+    public function peserta(string $parameter, string $tanggalSEP = null) {
+        $this->result = $this->peserta->get($parameter, $tanggalSEP);
+        return $this->result;
+    } 
 }

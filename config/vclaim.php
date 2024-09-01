@@ -33,4 +33,10 @@ return [
      * 
      */
     'timeout_connection' => env('VCLAIM_TIMEOUT_CONNECTION', 30),
+
+    /**
+     * 
+     */
+    'parameter_version' => '2.0',
+
 ];

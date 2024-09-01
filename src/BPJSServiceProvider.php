@@ -5,6 +5,7 @@ namespace EkoSuprianto\EBridgingBpjs;
 use EkoSuprianto\EBridgingBpjs\Facades\HttpFacades;
 use Illuminate\Support\ServiceProvider;
 use EkoSuprianto\EBridgingBpjs\Services\HttpRequest;
+use EkoSuprianto\EBridgingBpjs\Services\Peserta;
 
 class BPJSServiceProvider extends ServiceProvider
 {
@@ -15,7 +16,9 @@ class BPJSServiceProvider extends ServiceProvider
         });
 
         $this->app->singleton(EBridgingBpjs::class, function () {
-            return new EBridgingBpjs(new HttpFacades);
+            return new EBridgingBpjs(
+                new Peserta(new HttpFacades)
+            );
         });
     }
 
